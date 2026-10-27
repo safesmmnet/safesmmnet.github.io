@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeSMM API Developer Hub: SMM Panel API v2 Guide and Code</title>
+<meta name="description" content="Free guide and open-source code for the SafeSMM SMM panel API v2: PHP, Python, Telegram order alerts, drip-feed, status codes and crypto payments.">
+<link rel="canonical" href="https://safesmmnet.github.io/">
+<meta name="robots" content="index, follow">
+<style>
+body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#1e293b;background:#f8fafc;line-height:1.65}
+.wrap{max-width:860px;margin:0 auto;padding:24px 18px 48px}
+header{background:#0f172a;color:#fff;padding:36px 18px;text-align:center}
+header h1{margin:0 0 10px;font-size:28px;line-height:1.3}
+header p{margin:0 auto;max-width:640px;color:#cbd5e1}
+h2{font-size:22px;margin:34px 0 12px;color:#0f172a}
+h3{font-size:17px;margin:18px 0 6px;color:#0f172a}
+a{color:#047857}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:18px;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+pre{background:#0f172a;color:#e2e8f0;padding:14px;border-radius:10px;overflow-x:auto;font-size:14px}
+code{font-family:Consolas,Menlo,monospace}
+table{border-collapse:collapse;width:100%;min-width:480px;background:#fff}
+th,td{border:1px solid #e2e8f0;padding:8px 10px;text-align:left;font-size:15px}
+th{background:#ecfdf5}
+.tw{overflow-x:auto}
+.btn{display:inline-block;background:#047857;color:#fff;text-decoration:none;padding:10px 18px;border-radius:8px;margin:6px 4px;font-weight:600}
+footer{text-align:center;color:#64748b;font-size:14px;padding:24px 18px;border-top:1px solid #e2e8f0}
+</style>
+</head>
+<body>
+<header>
+<h1>SafeSMM API Developer Hub</h1>
+<p>Open-source examples, libraries and guides for connecting your app, bot or reseller website to the <a href="https://safesmm.net" style="color:#6ee7b7">SafeSMM SMM panel</a> through the standard API v2.</p>
+</header>
+<div class="wrap">
+
+<h2>What is the SafeSMM API?</h2>
+<p>SafeSMM uses the common SMM panel API v2 format. You send a POST request with your API key and an action, and you get JSON back. If you already work with another panel that uses this format, your code usually needs only a new URL and key.</p>
+<div class="card">
+<p style="margin:0"><b>Endpoint:</b> <code>https://safesmm.net/api/v2</code><br>
+<b>Method:</b> POST &nbsp; <b>Response:</b> JSON<br>
+<b>Official reference:</b> <a href="https://safesmm.net/api/docs">SafeSMM API documentation</a><br>
+<b>API key:</b> create a free account, then open the Account page.</p>
+</div>
+
+<h2>Actions at a glance</h2>
+<div class="tw"><table>
+<tr><th>Action</th><th>Use it to</th><th>Main parameters</th></tr>
+<tr><td><code>services</code></td><td>Get service IDs, rates, min and max</td><td>none</td></tr>
+<tr><td><code>add</code></td><td>Place an order</td><td>service, link, quantity</td></tr>
+<tr><td><code>add</code> + drip-feed</td><td>Deliver in parts over time</td><td>runs, interval</td></tr>
+<tr><td><code>status</code></td><td>Check one or many orders</td><td>order or orders</td></tr>
+<tr><td><code>refill</code></td><td>Request a refill on eligible services</td><td>order</td></tr>
+<tr><td><code>cancel</code></td><td>Request cancellation</td><td>order</td></tr>
+<tr><td><code>balance</code></td><td>Read account balance</td><td>none</td></tr>
+</table></div>
+
+<h2>Quick start</h2>
+<h3>cURL</h3>
+<pre><code>curl -X POST https://safesmm.net/api/v2 \
+  -d "key=YOUR_API_KEY" \
+  -d "action=balance"</code></pre>
+<h3>Python (pip install safesmm)</h3>
+<pre><code>from safesmm import SafeSMM
+
+api = SafeSMM("YOUR_API_KEY")
+print(api.balance())
+order = api.add_order(service=1, link="https://example.com/post", quantity=100)
+print(api.status(order["order"]))</code></pre>
+<p>A wrong key returns <code>{"error": "Invalid API key."}</code>. Always check for an <code>error</code> field before reading the result.</p>
+
+<h2>Open-source code and guides</h2>
+<div class="grid">
+<div class="card"><h3 style="margin-top:0">PHP and Python examples</h3><p>Small client classes with error handling, plus a Telegram order watcher.</p><a href="https://github.com/safesmmnet/safesmm-api-examples">View on GitHub</a></div>
+<div class="card"><h3 style="margin-top:0">Python package</h3><p>The <code>safesmm</code> library on PyPI. Standard library only, no extra dependencies.</p><a href="https://pypi.org/project/safesmm/">View on PyPI</a></div>
+<div class="card"><h3 style="margin-top:0">Connect your app to the API</h3><p>Step-by-step tutorial with PHP and Python code.</p><a href="https://dev.to/safesmmnet/how-to-connect-your-app-to-an-smm-panel-api-php-and-python-examples-4n86">Read on Dev.to</a></div>
+<div class="card"><h3 style="margin-top:0">Telegram bot for orders</h3><p>Manage orders and check balance from a Telegram chat.</p><a href="https://dev.to/safesmmnet/build-a-telegram-bot-to-manage-smm-panel-orders-with-python-2no">Read on Dev.to</a></div>
+<div class="card"><h3 style="margin-top:0">Order status alerts</h3><p>Get a Telegram message whenever an order changes status.</p><a href="https://dev.to/safesmmnet/get-telegram-alerts-when-your-smm-panel-orders-change-status-python-no-dependencies-28bh">Read on Dev.to</a></div>
+<div class="card"><h3 style="margin-top:0">Order status meanings</h3><p>Pending, In progress, Partial, Canceled: what each one means for your balance.</p><a href="https://safesmm.net/blog/smm-panel-order-status-meanings">Read the guide</a></div>
+</div>
+
+<h2>Best practices for resellers</h2>
+<div class="card">
+<p>1. Call <code>services</code> once and cache it. Refresh a few times a day, not on every request.</p>
+<p>2. Check status in batches (up to 100 IDs per call) every few minutes instead of every second.</p>
+<p>3. Validate quantity against the service min and max before sending an order.</p>
+<p>4. Keep the API key on your server. Never put it in front-end JavaScript or a public repository.</p>
+<p>5. Use drip-feed for large orders so delivery looks gradual. Each run must be at least the service minimum.</p>
+<p style="margin:0">6. Store the order ID returned by <code>add</code> so you can request a refill or cancel later.</p>
+</div>
+
+<h2>Funding your account</h2>
+<p>SafeSMM accepts USDT (TRC20 and BEP20), Binance Pay, Cryptomus and Perfect Money, plus local wallets for some countries. See the <a href="https://safesmm.net/smm-panel-crypto">crypto payment guide</a> or the <a href="https://safesmm.net/blog/smm-panel-binance-pay">Binance Pay steps</a>.</p>
+
+<h2>FAQ</h2>
+<h3>Is the API free to use?</h3>
+<p>Yes. There is no API fee. You only pay for the orders you place, at the rates shown on the <a href="https://safesmm.net/services">services page</a>.</p>
+<h3>Can I connect my own reseller panel?</h3>
+<p>Yes. Most panel scripts support API v2 providers. Add the endpoint and your key as a provider, then import services. More details on the <a href="https://safesmm.net/smm-reseller-panel">reseller panel page</a>.</p>
+<h3>Where do I get help?</h3>
+<p>Open a ticket from your account or message Telegram <a href="https://t.me/SafeSMM_Admin">@SafeSMM_Admin</a>.</p>
+
+<p style="text-align:center;margin-top:30px"><a class="btn" href="https://safesmm.net/api/docs">Open API docs</a><a class="btn" href="https://github.com/safesmmnet/safesmm-api-examples">Get the code</a></p>
+</div>
+<footer>Maintained by the SafeSMM team. Code examples are MIT licensed. &copy; 2026 SafeSMM (safesmm.net)</footer>
+</body>
+  </html>
